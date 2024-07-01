@@ -1,0 +1,14 @@
+﻿
+using Microsoft.EntityFrameworkCore;
+
+namespace CandyStoreApi.Models
+{
+    public class CandyStoreApiContext : DbContext
+    {
+        public CandyStoreApiContext(DbContextOptions<CandyStoreApiContext> options) : base(options)
+        {
+        }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Candy> Candies { get; set; }
+    }
+}

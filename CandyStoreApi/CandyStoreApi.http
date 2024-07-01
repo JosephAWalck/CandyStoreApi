@@ -1,0 +1,6 @@
+@CadyStoreApi_HostAddress = http://localhost:5228
+
+GET {{CadyStoreApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

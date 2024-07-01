@@ -16,5 +16,10 @@ namespace CandyStoreApi.Models
                 return await task;
             }
         }
+
+        public Category? GetCategoryById(int categoryId)
+        {
+            return _candyStoreApiContext.Categories.FirstOrDefault(c => c.CategoryID == categoryId);
+        }
     }
 }

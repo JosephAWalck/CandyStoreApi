@@ -53,14 +53,30 @@ namespace CadyStoreApi.Controllers
         // PUT: api/Candies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCandy(int id, Candy candy)
+        public async Task<IActionResult> PutCandy(int id, CandyDTO candyDTO)
         {
-            if (id != candy.CandyId)
+            Category? category = _categoryRepository.GetCategoryById(candyDTO.CategoryID);
+            if (category == null || id != candyDTO.CandyId)
             {
-                return BadRequest();
+                BadRequest();
             }
 
-            _context.Entry(candy).State = EntityState.Modified;
+            var candy = await _candyRepository.GetCandyById(id);
+            if (candy == null)
+            {
+                NotFound();
+            }
+            else
+            {
+                candy.Name = candyDTO.Name;
+                candy.Description = candyDTO.Description;
+                candy.Price = candyDTO.Price;
+                candy.ImageURL = candyDTO.ImageURL;
+                candy.Inventory = candyDTO.Inventory;
+                candy.CategoryID = candyDTO.CategoryID;
+
+                _context.Entry(candy).State = EntityState.Modified;
+            }
 
             try
             {
@@ -84,8 +100,25 @@ namespace CadyStoreApi.Controllers
         // POST: api/Candies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Candy>> PostCandy(Candy candy)
+        public async Task<ActionResult<CandyDTO>> PostCandy(CandyDTO candyDTO)
         {
+            Category? category = _categoryRepository.GetCategoryById(candyDTO.CategoryID);
+            if (category == null) 
+            { 
+                BadRequest();
+            }
+
+            var candy = new Candy
+            {
+                CandyId = candyDTO.CandyId,
+                Name = candyDTO.Name,
+                Description = candyDTO.Description,
+                Price = candyDTO.Price,
+                ImageURL = candyDTO.ImageURL,
+                Inventory = candyDTO.Inventory,
+                CategoryID = candyDTO.CategoryID,
+                Category = category!
+            };
             
             _context.Candies.Add(candy);
             await _context.SaveChangesAsync();

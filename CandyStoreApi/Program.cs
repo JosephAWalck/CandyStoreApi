@@ -10,8 +10,17 @@ builder.Services.AddDbContext<CandyStoreApiContext>(options =>
 
 builder.Services.AddScoped<ICandyRepository, CandyRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IShoppingCart, ShoppingCart>(sp => ShoppingCart.GetCart(sp));
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession();
+
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -28,6 +37,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();
 
 app.UseAuthorization();
 

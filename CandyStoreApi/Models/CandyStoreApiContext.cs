@@ -10,5 +10,6 @@ namespace CandyStoreApi.Models
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Candy> Candies { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

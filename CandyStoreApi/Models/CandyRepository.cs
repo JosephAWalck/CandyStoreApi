@@ -10,7 +10,7 @@ namespace CandyStoreApi.Models
         {
             _candyStoreApiContext = candyStoreApiContext;
         }
-        public async Task<IEnumerable<Candy>> AllCandies(string? category) 
+        public async Task<IEnumerable<Candy>> AllCandies(string? category = null) 
         {
             if (category == null) 
             {

@@ -21,7 +21,7 @@ namespace CandyStoreApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ShoppingCartItem>>> GetShoppingCart()
         {
-            var items = _shoppingCart.GetShoppingCartItems();
+            var items = await _shoppingCart.GetShoppingCartItems();
             _shoppingCart.ShoppingCartItems = items;
             return items;
         }
@@ -34,7 +34,7 @@ namespace CandyStoreApi.Controllers
             {
                 _shoppingCart.AddToCart(selectedCandy);
             }
-            return _shoppingCart.GetShoppingCartItems().ToList();
+            return await _shoppingCart.GetShoppingCartItems();
         }
 
         [Route("/api/[controller]/remove")]
@@ -46,7 +46,7 @@ namespace CandyStoreApi.Controllers
             {
                 _shoppingCart.RemoveFromCart(selectedCandy);
             }
-            return _shoppingCart.GetShoppingCartItems().ToList();
+            return await _shoppingCart.GetShoppingCartItems();
         }
     }
 }

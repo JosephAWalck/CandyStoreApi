@@ -3,10 +3,10 @@
     public interface IShoppingCart
     {
         void AddToCart(Candy candy);
-        int RemoveFromCart(Candy candy);
-        List<ShoppingCartItem> GetShoppingCartItems();
+        void RemoveFromCart(Candy candy);
+        Task<List<ShoppingCartItem>> GetShoppingCartItems();
         void ClearCart();
-        decimal GetShoppingCartTotal();
+        Task<decimal> GetShoppingCartTotal();
         List<ShoppingCartItem> ShoppingCartItems { get; set;  }
     }
 }

@@ -45,18 +45,16 @@ namespace CandyStoreApi.Models
 
             _candyStoreApiDbContext.SaveChanges();
         }
-        public int RemoveFromCart(Candy candy)
+        public void RemoveFromCart(Candy candy)
         {
             var shoppingCartItem = _candyStoreApiDbContext.ShoppingCartItems.SingleOrDefault(
                 s => s.Candy.CandyId == candy.CandyId && s.ShoppingCartId == ShoppingCartId);
-            var localAmount = 0;
 
             if (shoppingCartItem != null)
             {
                 if (shoppingCartItem.Count > 1)
                 {
                     shoppingCartItem.Count--;
-                    localAmount = shoppingCartItem.Count;
                 }
                 else
                 {
@@ -64,14 +62,13 @@ namespace CandyStoreApi.Models
                 }
             }
             _candyStoreApiDbContext.SaveChanges();
-            return localAmount;
         }
 
-        public List<ShoppingCartItem> GetShoppingCartItems()
+        public async Task<List<ShoppingCartItem>> GetShoppingCartItems()
         {
-            return ShoppingCartItems ??= _candyStoreApiDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
+            return ShoppingCartItems ??= await _candyStoreApiDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
                 .Include(s => s.Candy)
-                .ToList();
+                .ToListAsync();
         }
         public void ClearCart()
         {
@@ -82,10 +79,10 @@ namespace CandyStoreApi.Models
             _candyStoreApiDbContext.ShoppingCartItems.RemoveRange(cartItems);
             _candyStoreApiDbContext.SaveChanges();
         }
-        public decimal GetShoppingCartTotal()
+        public async Task<decimal> GetShoppingCartTotal()
         {
-            var total = _candyStoreApiDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
-                .Select(C => C.Candy.Price).Sum();
+            var total = await _candyStoreApiDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
+                .Select(C => C.Candy.Price).SumAsync();
             return total;
         }
     }

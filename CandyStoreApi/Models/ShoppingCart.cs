@@ -33,14 +33,14 @@ namespace CandyStoreApi.Models
                 {
                     ShoppingCartId = ShoppingCartId,
                     Candy = candy,
-                    Count = 1
+                    Quantity = 1
                 };
 
                 _candyStoreApiDbContext.ShoppingCartItems.Add(shoppingCartItem);
             }
             else
             {
-                shoppingCartItem.Count++;
+                shoppingCartItem.Quantity++;
             }
 
             _candyStoreApiDbContext.SaveChanges();
@@ -52,9 +52,9 @@ namespace CandyStoreApi.Models
 
             if (shoppingCartItem != null)
             {
-                if (shoppingCartItem.Count > 1)
+                if (shoppingCartItem.Quantity > 1)
                 {
-                    shoppingCartItem.Count--;
+                    shoppingCartItem.Quantity--;
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace CandyStoreApi.Models
         public async Task<decimal> GetShoppingCartTotal()
         {
             var total = await _candyStoreApiDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
-                .Select(C => C.Candy.Price).SumAsync();
+                .Select(C => C.Candy.Price * C.Quantity).SumAsync();
             return total;
         }
     }

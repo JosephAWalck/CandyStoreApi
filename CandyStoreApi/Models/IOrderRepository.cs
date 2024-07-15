@@ -2,6 +2,6 @@
 {
     public interface IOrderRepository
     {
-        Task CreateOrder(Order order);
+        Task<Order> CreateOrder(OrderDTO orderDTO);
     }
 }

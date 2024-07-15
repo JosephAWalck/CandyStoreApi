@@ -56,12 +56,11 @@ namespace CadyStoreApi.Controllers
         public async Task<IActionResult> PutCandy(int id, CandyDTO candyDTO)
         {
             Category? category = _categoryRepository.GetCategoryById(candyDTO.CategoryID);
-            if (category == null || id != candyDTO.CandyId)
+            var candy = await _candyRepository.GetCandyById(id);
+            if (category == null || (candy != null && id != candy.CandyId))
             {
                 BadRequest();
             }
-
-            var candy = await _candyRepository.GetCandyById(id);
             if (candy == null)
             {
                 NotFound();
@@ -110,7 +109,6 @@ namespace CadyStoreApi.Controllers
 
             var candy = new Candy
             {
-                CandyId = candyDTO.CandyId,
                 Name = candyDTO.Name,
                 Description = candyDTO.Description,
                 Price = candyDTO.Price,

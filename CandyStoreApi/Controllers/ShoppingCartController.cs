@@ -7,13 +7,11 @@ namespace CandyStoreApi.Controllers
     [ApiController]
     public class ShoppingCartController : Controller
     {
-        private readonly CandyStoreApiContext _context;
         private readonly ICandyRepository _candyRepository;
         private readonly IShoppingCart _shoppingCart;
 
         public ShoppingCartController(CandyStoreApiContext context, ICandyRepository candyRepository, IShoppingCart shoppingCart)
         {
-            _context = context;
             _candyRepository = candyRepository;
             _shoppingCart = shoppingCart;
         }

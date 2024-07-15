@@ -30,7 +30,6 @@ namespace CandyStoreApi.Models
         public async Task<Candy?> GetCandyById(int candyId)
         {
             return await _candyStoreApiContext.Candies.FirstOrDefaultAsync(c => c.CandyId == candyId);
-            
         }
 
         public async Task<IEnumerable<Candy>> SearchCandies(string searchQuery)

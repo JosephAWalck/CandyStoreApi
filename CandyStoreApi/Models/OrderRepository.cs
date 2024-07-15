@@ -12,29 +12,43 @@
             _shoppingCart = shoppingCart;
         }
 
-        public async Task CreateOrder(Order order)
+        public async Task<Order> CreateOrder(OrderDTO orderDTO)
         {
-            order.OrderPlaced = DateTime.Now;
+            Order order = new Order
+            {
+                OrderDetails = new List<OrderDetail>(),
+                FirstName = orderDTO.FirstName,
+                LastName = orderDTO.LastName,
+                AddressLine1 = orderDTO.AddressLine1,
+                AddressLine2 = orderDTO.AddressLine2,
+                ZipCode = orderDTO.ZipCode,
+                City = orderDTO.City,
+                State = orderDTO.State,
+                Country = orderDTO.Country,
+                PhoneNumber = orderDTO.PhoneNumber,
+                Email = orderDTO.Email,
+                OrderTotal = await _shoppingCart.GetShoppingCartTotal(),
+                OrderPlaced = DateTime.Now,
+            };
 
             List<ShoppingCartItem> shoppingCartItems = _shoppingCart.ShoppingCartItems;
-            order.OrderTotal = await _shoppingCart.GetShoppingCartTotal();
-
-            order.OrderDetails = new List<OrderDetail>();
 
             foreach (ShoppingCartItem? shoppingCartItem in shoppingCartItems)
             {
                 var orderDetail = new OrderDetail
                 {
-                    Amount = shoppingCartItem.Count,
+                    Quantity = shoppingCartItem.Quantity,
                     CandyId = shoppingCartItem.Candy.CandyId,
                     Price = shoppingCartItem.Candy.Price
                 };
-
-                order.OrderDetails.Add(orderDetail);
+                shoppingCartItem.Candy.Inventory -= shoppingCartItem.Quantity;
+                order.OrderDetails.Add(orderDetail); 
             }
 
-            _candyStoreApiContext.Orders.Add(order);
+            _candyStoreApiContext.Orders.Add(order); 
             _candyStoreApiContext.SaveChanges();
+
+            return order;
         }
     }
 

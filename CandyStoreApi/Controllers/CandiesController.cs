@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CandyStoreApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace CadyStoreApi.Controllers
@@ -26,7 +22,7 @@ namespace CadyStoreApi.Controllers
         }
 
         // GET: api/Candies
-        [HttpGet]
+        [HttpGet]        
         public async Task<ActionResult<IEnumerable<Candy>>> GetCandies(string? category)
         {
             IEnumerable<Candy> candies;
@@ -37,7 +33,7 @@ namespace CadyStoreApi.Controllers
         }
 
         // GET: api/Candies/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}")]        
         public async Task<ActionResult<Candy>> GetCandy(int id)
         {
             var candy = await _candyRepository.GetCandyById(id);
@@ -53,6 +49,7 @@ namespace CadyStoreApi.Controllers
         // PUT: api/Candies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutCandy(int id, CandyDTO candyDTO)
         {
             Category? category = _categoryRepository.GetCategoryById(candyDTO.CategoryID);
@@ -99,6 +96,7 @@ namespace CadyStoreApi.Controllers
         // POST: api/Candies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CandyDTO>> PostCandy(CandyDTO candyDTO)
         {
             Category? category = _categoryRepository.GetCategoryById(candyDTO.CategoryID);
@@ -126,6 +124,7 @@ namespace CadyStoreApi.Controllers
 
         // DELETE: api/Candies/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteCandy(int id)
         {
             var candy = await _context.Candies.FindAsync(id);

@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - CandyStoreAPI
+name: Build and deploy ASP.Net Core app to Azure Web App - CandyStoreApi
 
 on:
   push:
@@ -27,12 +27,6 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Install dotnet ef
-        run: dotnet tool install --global dotnet-ef --version 8.*
-
-      - name: Create migrations bundle
-        run: dotnet ef migrations bundle --runtime linux-x64 -o ${{env.DOTNET_ROOT}}/myapp/migrationsbundle
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -57,15 +51,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1BD4529565234DBE837C03EC89A62E00 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0411CDC6D29749B1BD0E020C8809CF90 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4536349087464328A281D746C90EAD25 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_87D3F6F5EC824AF89954F488D523F5C6 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6CB34CB098AF4AA09296D4F747A912DA }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6F87F7248B4E4249BF973F3CB863A1EC }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'CandyStoreAPI'
+          app-name: 'CandyStoreApi'
           slot-name: 'Production'
           package: .
           

@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("CandyStoreApiContextConnection") ?? throw new InvalidOperationException("Connection string 'CandyStoreApiContextConnection' not found.");
+// var connectionString = builder.Configuration.GetConnectionString("CandyStoreApiContextConnection") ?? throw new InvalidOperationException("Connection string 'CandyStoreApiContextConnection' not found.");
 // Add services to the container.
 
 var jwtSettings = new JwtSettings();
@@ -55,8 +55,23 @@ builder.Services.AddIdentityCore<IdentityUser>(options =>
     .AddSignInManager()
     .AddEntityFrameworkStores<CandyStoreApiContext>();
 
-builder.Services.AddDbContext<CandyStoreApiContext>(options =>
-    options.UseSqlServer(connectionString));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<CandyStoreApiContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("CandyStoreApiContextConnection")));
+    builder.Services.AddDistributedMemoryCache();
+}
+else
+{
+    builder.Services.AddDbContext<CandyStoreApiContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"];
+        options.InstanceName = "CandyStoreApiInstance";
+    });
+}
+
 
 builder.Services.AddScoped<IdentityService>();
 

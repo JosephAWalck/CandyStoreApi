@@ -1,6 +1,12 @@
 # Candy Store REST API 
 
-Describe the REST API
+The Candy Store API is a RESTful API that offers the functionality of an online Candy Store back-end and database. Available Routes include:
+
+- Login and Registration for Authentication and Authorization of users. Auth service is JWT-based and performed local to the application.
+    - Roles: 0 == "Admin", 1 == "User"
+- CRUD operations on Candy objects. POST, PUT, and DELETE require the "Admin" role. GET and GET by ID are unprotected routes accessible to anyone.
+- Get, Add to, and Remove from a user's Shopping Cart.
+- Submit an Order.
 
 # Authentication
 
